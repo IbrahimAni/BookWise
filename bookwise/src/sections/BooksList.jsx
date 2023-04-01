@@ -1,16 +1,7 @@
 import React, {useState, useEffect} from 'react'
-import { fetchBooks } from '../api';
-const BooksList = () => {
-  const [books, setBooks] = useState([]);
+// import { fetchBooks } from '../api';
+const BooksList = ({books, viewBook}) => {
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const fetchedBooks = await fetchBooks();
-      setBooks(fetchedBooks);
-    };
-    fetchData();
-  }, []);
-  
   return (
     <div className="data-display-section">
       <div className="bg-white shadow rounded p-4">
@@ -40,12 +31,12 @@ const BooksList = () => {
                   <td className="border-b p-2 truncate w-40">{book.characters}</td>
                   <td className="border-b p-2 truncate w-64">{book.synopsis}</td>
                   <td className="border-b p-2">
-                    <a
-                      href={`view?id=${book.id}`}
+                    <button
+                      onClick={() => viewBook(book.id)}
                       className="bg-blue-500 text-white hover:text-white hover:opacity-75 py-1 px-3 rounded"
                     >
                       View
-                    </a>
+                    </button>
                   </td>
                 </tr>
               ))}

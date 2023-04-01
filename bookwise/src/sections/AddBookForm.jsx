@@ -1,15 +1,40 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react';
+import { addBook } from '../api';
+import { BookActionAlert } from '../components';
 
-const AddBookForm= () => {
-  const [bookId, setBookId] = useState('0');
+const AddBookForm= ({showAlert, updateBooks }) => {
+  const [book, setBook] = useState({
+    id: '0',
+    title: '',
+    author: '',
+    date: '',
+    genres: '',
+    characters: '',
+    synopsis: ''
+  });
 
-  const handleIdChange = (e) => {
-    setBookId(e.target.value);
+  const handleChange = (e) => {
+    setBook({ ...book, [e.target.name]: e.target.value });
   };
-  
-  const submitBook = (e) => {
+      
+  const submitBook = async (e) => {
     e.preventDefault();
-    // Add your submit logic here
+    const addedBook = await addBook(book);
+    if (addedBook) {
+      showAlert("added");
+      updateBooks();
+
+      // Reset the form
+      setBook({
+        id: '0',
+        title: '',
+        author: '',
+        date: '',
+        genres: '',
+        characters: '',
+        synopsis: ''
+      });
+    }
   };
 
   return (
@@ -23,7 +48,7 @@ const AddBookForm= () => {
             className="form-input w-full p-2 border rounded"
             id="book-id"
             name="id"
-            value={bookId}
+            value={book.id}
             hidden
             readOnly
           />
@@ -39,6 +64,8 @@ const AddBookForm= () => {
               id="book-title"
               placeholder="Enter book title"
               name="title"
+              value={book.title}
+              onChange={handleChange}
             />
           </div>
           <div className="mb-4">
@@ -51,6 +78,8 @@ const AddBookForm= () => {
               id="book-author"
               placeholder="Enter author name"
               name="author"
+              value={book.author}
+              onChange={handleChange}
             />
           </div>
           <div className="mb-4">
@@ -62,6 +91,8 @@ const AddBookForm= () => {
               className="form-input w-full p-2 border rounded"
               id="book-date"
               name="date"
+              value={book.date}
+              onChange={handleChange}
             />
           </div>
           <div className="mb-4">
@@ -74,6 +105,8 @@ const AddBookForm= () => {
               id="book-genres"
               placeholder="Enter genres"
               name="genres"
+              value={book.genres}
+              onChange={handleChange}
             />
           </div>
           <div className="mb-4">
@@ -86,6 +119,8 @@ const AddBookForm= () => {
               id="book-characters"
               placeholder="Enter characters"
               name="characters"
+              value={book.characters}
+              onChange={handleChange}
             />
           </div>
           <div className="mb-4">
@@ -97,6 +132,8 @@ const AddBookForm= () => {
               id="book-synopsis"
               placeholder="Enter synopsis"
               name="synopsis"
+              value={book.synopsis}
+              onChange={handleChange}
             ></textarea>
           </div>
           <button type="submit" className="bg-blue-500 text-white py-2 px-4 rounded">

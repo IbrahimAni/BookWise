@@ -11,3 +11,27 @@ export const fetchBooks = async () => {
     return [];
   }
 };
+
+export const addBook = async (book) => {
+  try {
+    const response = await axios.post(baseUrl, book);
+    return response.data;
+  } catch (error) {
+    console.error('Error creating book:', error);
+    return null;
+  }
+};
+
+export const fetchBook = async (bookId) => {
+  try {
+    const response = await axios.get(baseUrl, {
+      params: {
+        id: bookId,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching book:', error);
+    return null;
+  }
+};

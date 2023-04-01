@@ -15,7 +15,7 @@ const Navbar = () => {
   };
 
   return (
-    <header className="bg-blue-500 fixed w-full z-10" style={{ zIndex: '999' }}>
+    <header className="bg-blue-500 fixed w-full z-10">
       <div className="container mx-auto px-6 py-4">
         <div className="flex justify-between items-center">
           <div className="text-white font-semibold text-lg">Bookwise</div>
@@ -30,7 +30,7 @@ const Navbar = () => {
             </button>
           </div>
           <nav
-            className={`md:inline transition-all duration-700 ease-in-out w-full md:w-auto absolute md:relative left-0 md:top-0 bg-black md:bg-transparent p-4 md:p-0 ${
+            className={`md:inline transition-all duration-700 ease-in-out w-full md:w-auto absolute md:relative left-0 md:top-0 bg-blue-500 md:bg-transparent p-4 md:p-0 ${
               menuOpen
                 ? 'top-full opacity-100'
                 : '-top-full opacity-0 md:opacity-100'
@@ -39,7 +39,7 @@ const Navbar = () => {
             <ul className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4 text-white">
               {links.map((link, index) => (
                 <li key={index}>
-                  <a href={link.href} className="text-white hover:text-white hover:opacity-75">
+                  <a href={link.href} className="text-white hover:text-white hover:opacity-75 cursor-pointer">
                     {link.text}
                   </a>
                 </li>
@@ -47,7 +47,7 @@ const Navbar = () => {
             </ul>
           </nav>
           <button
-            className="md:hidden text-white bg-black"
+            className="md:hidden text-white bg-blue-500"
             id="mobile-menu-button"
             onClick={toggleMenu}
           >
