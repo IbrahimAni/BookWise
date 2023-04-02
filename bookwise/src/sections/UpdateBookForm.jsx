@@ -1,21 +1,43 @@
-import React from 'react'
+import React, {useState, useEffect} from 'react'
+import { fetchBook, updateBook } from '../api';
 
-const UpdateBookForm = ({id, title, author, date, genres, characters, synopsis}) => {
-  const [bookId, setBookId] = useState({id});
+const UpdateBookForm = ({selectedBookId, showAlert, setView, updateBooks}) => {
+  const [book, setBook] = useState(null);
 
-  const handleIdChange = (e) => {
-    setBookId(e.target.value);
+  useEffect(() => {    
+    // Fetch the book data based on the book ID and update the book state
+    const fetchedBook = async() => {
+      const book = await fetchBook(selectedBookId);
+      setBook(book);
+    }
+    fetchedBook();
+  }, [selectedBookId]);
+
+  if(!book){
+    return <div>Loading...</div>
+  }
+
+  const handleInputChange = (e) => {
+    setBook({ ...book, [e.target.name]: e.target.value });
   };
   
-  const submitBook = (e) => {
+  const submitBook = async (e) => {
     e.preventDefault();
-    // Add your submit logic here
+    
+    try {
+      await updateBook(selectedBookId, book)
+      showAlert("updated");
+      setView("bookDetails")
+      updateBooks();
+    } catch (error) {
+      console.error("Error updating book:", error);
+    }
   };
 
   return (
     <div className="data-input-section w-full">
       <div className="bg-white shadow rounded p-4 w-full">
-        <h2 className="text-xl font-semibold mb-4">Add Book</h2>
+        <h2 className="text-xl font-semibold mb-4">Update Book</h2>
         <form id="book-form" action="add-book" method="POST" onSubmit={submitBook}>
           <div className="mb-4">
           <input
@@ -23,7 +45,7 @@ const UpdateBookForm = ({id, title, author, date, genres, characters, synopsis})
             className="form-input w-full p-2 border rounded"
             id="book-id"
             name="id"
-            value={id}
+            value={book.id}
             hidden
             readOnly
           />
@@ -38,8 +60,9 @@ const UpdateBookForm = ({id, title, author, date, genres, characters, synopsis})
               className="form-input w-full p-2 border rounded"
               id="book-title"
               placeholder="Enter book title"
-              value={title}
+              value={book.title}
               name="title"
+              onChange={handleInputChange}
             />
           </div>
           <div className="mb-4">
@@ -51,8 +74,9 @@ const UpdateBookForm = ({id, title, author, date, genres, characters, synopsis})
               className="form-input w-full p-2 border rounded"
               id="book-author"
               placeholder="Enter author name"
-              value={author}
+              value={book.author}
               name="author"
+              onChange={handleInputChange}
             />
           </div>
           <div className="mb-4">
@@ -63,8 +87,9 @@ const UpdateBookForm = ({id, title, author, date, genres, characters, synopsis})
               type="date"
               className="form-input w-full p-2 border rounded"
               id="book-date"
-              value={date}
+              value={book.date}
               name="date"
+              onChange={handleInputChange}
             />
           </div>
           <div className="mb-4">
@@ -76,8 +101,9 @@ const UpdateBookForm = ({id, title, author, date, genres, characters, synopsis})
               className="form-input w-full p-2 border rounded"
               id="book-genres"
               placeholder="Enter genres"
-              value={genres}
+              value={book.genres}
               name="genres"
+              onChange={handleInputChange}
             />
           </div>
           <div className="mb-4">
@@ -89,8 +115,9 @@ const UpdateBookForm = ({id, title, author, date, genres, characters, synopsis})
               className="form-input w-full p-2 border rounded"
               id="book-characters"
               placeholder="Enter characters"
-              value={characters}
+              value={book.characters}
               name="characters"
+              onChange={handleInputChange}
             />
           </div>
           <div className="mb-4">
@@ -101,8 +128,9 @@ const UpdateBookForm = ({id, title, author, date, genres, characters, synopsis})
               className="form-textarea w-full p-2 border rounded"
               id="book-synopsis"
               placeholder="Enter synopsis"
-              value={synopsis}
+              value={book.synopsis}
               name="synopsis"
+              onChange={handleInputChange}
             ></textarea>
           </div>
           <button type="submit" className="bg-blue-500 text-white py-2 px-4 rounded">

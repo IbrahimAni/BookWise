@@ -2,17 +2,30 @@ import React, { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars, faSearch } from '@fortawesome/free-solid-svg-icons';
 
-const Navbar = () => {
+const Navbar = ({handleViewChange, searchBookByTitle, updateRightSection, setView, setViewBookList}) => {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [searchValue, setSearchValue] = useState("");
 
   const links = [
-    { view: 'showBooks', text: 'Show All Books' },
-    { view: 'addBook', text: 'Add Book' },
+    { view: 'showBooks', text: 'Show All Books', onClick: async() => {await handleViewChange("showBooks")} },
+    { view: 'addBook', text: 'Add Book', onClick: () => handleViewChange("addBook") },
   ];
 
   const toggleMenu = () => {
     setMenuOpen(!menuOpen);
   };
+
+  const handleSearch = (searchValue) => { 
+    // e.preventDefault();
+    setSearchValue(searchValue);
+  }
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    handleSearch(searchValue);
+    searchBookByTitle(searchValue);
+    setSearchValue("");
+  }
 
   return (
     <header className="bg-blue-500 fixed w-full z-10">
@@ -22,10 +35,13 @@ const Navbar = () => {
           <div className="hidden md:flex items-center">
             <input
               type="text"
-              className="border border-white rounded-l p-2 focus:outline-none focus:border-white mr-2"
+              className="border border-white rounded-3 p-2 focus:outline-none focus:border-white mr-2"
               placeholder="Search"
+              name='search'
+              value={searchValue}
+              onChange={(e) => handleSearch(e.target.value)}
             />
-            <button className="bg-white text-blue-500 rounded-l p-2">
+            <button className="bg-white text-blue-500 rounded-l p-2" onClick={handleSubmit}>
               <FontAwesomeIcon icon={faSearch} />
             </button>
           </div>
@@ -39,9 +55,16 @@ const Navbar = () => {
             <ul className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4 text-white">
               {links.map((link, index) => (
                 <li key={index}>
-                  <a href={link.href} className="text-white hover:text-white hover:opacity-75 cursor-pointer">
-                    {link.text}
-                  </a>
+                <p
+                  role="button"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    link.onClick();
+                  }}
+                  className="text-white hover:text-white hover:opacity-75 cursor-pointer focus:outline-none"
+                >
+                  {link.text}
+                </p>
                 </li>
               ))}
             </ul>
