@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Navbar, AddBookForm, BooksList, BookDetails, UpdateBookForm } from './sections';
 import { BookActionAlert } from './components';
-import { fetchBooks, fetchBook, searchBook } from './api';
+import { fetchBooks, searchBook } from './api';
 import { LoadingOverlay } from './components';
 
 function App() {
@@ -37,6 +37,9 @@ function App() {
       await updateBooks();
     } else if (viewBookList === 'showAllBooks') {
       await updateBooks();
+    }else if (newView === 'settings') {
+      window.open('https://example.com', '_blank');
+      return;
     }
     
     if (newView !== 'showBooks') {

@@ -11,7 +11,7 @@ const Navbar = ({handleViewChange, searchBookByTitle }) => {
   const links = [
     { view: 'showBooks', text: 'Show All Books', onClick: async() => {setLoading(true); await handleViewChange("showBooks", () => setLoading(false))}},
     { view: 'addBook', text: 'Add Book', onClick: () => {setLoading(true); handleViewChange("addBook", () => setLoading(false))}},
-    { view: 'settings', type: 'icon', onClick: () => handleViewChange("settings") },
+    { view: 'info', type: 'icon', onClick: () => handleViewChange("settings") },
   ];
 
   const toggleMenu = () => {
