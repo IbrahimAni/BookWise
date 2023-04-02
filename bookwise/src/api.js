@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const baseUrl = "http://localhost:8080/BookWiseRestful/bookapi";
+const baseUrl = import.meta.env.VITE_APP_BASEURL;
 
 export const fetchBooks = async () => {
   try {
