@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { Navbar, AddBookForm, BooksList, BookDetails, UpdateBookForm } from './sections';
 import { BookActionAlert } from './components';
 import { fetchBooks, fetchBook, searchBook } from './api';
+import { LoadingOverlay } from './components';
 
 function App() {
   const [view, setView] = useState('addBook');
@@ -9,26 +10,28 @@ function App() {
   const [alert, setAlert] = useState({ show: false, action: '' });
   const [books, setBooks] = useState([]);
   const [selectedBookId, setSelectedBookId] = useState(null);
+  const [loading, setLoading] = useState(false);
 
-  const updateRightSection = () => {
-    setRightSectionUpdate((prev) => prev + 1);
-  }
 
   useEffect(() => {
     updateBooks();
   }, []);
 
-  const searchBookByTitle = async(title) => {
+  const searchBookByTitle = async(title, callback) => {
     const fetchedBooks = await searchBook(title);
     setBooks(fetchedBooks);
+
+    callback();
   }
 
   const updateBooks = async () => {
+    setLoading(true);
     const fetchedBooks = await fetchBooks();
     setBooks(fetchedBooks);
+    setLoading(false);
   };
 
-  const handleViewChange = async(newView) => {
+  const handleViewChange = async(newView, callback) => {
     if (newView === 'showBooks') {
       setViewBookList(newView);
       await updateBooks();
@@ -39,11 +42,15 @@ function App() {
     if (newView !== 'showBooks') {
       setView(newView);
     }
+
+    if (callback) callback();
   };
 
-  const handleViewBook = (bookId) => {
+  const handleViewBook = (bookId, callback) => {
     setSelectedBookId(bookId);
     setView('bookDetails');
+
+    callback();
   };
 
   const showAlert = (action) => {    
@@ -53,8 +60,9 @@ function App() {
 
   return (
     <div className="bg-gradient-to-r from-purple-600 via-blue-500 to-green-500 min-h-screen w-full">
+      {loading && <LoadingOverlay />}
       <BookActionAlert bookAdded={alert.show} action={alert.action} />
-      <Navbar handleViewChange={handleViewChange} setViewBookList={setViewBookList} setView={setView} searchBookByTitle={searchBookByTitle} updateRightSection={updateRightSection} />
+      <Navbar handleViewChange={handleViewChange} searchBookByTitle={searchBookByTitle} />
       <section className="absolute pt-24 w-full">
         <div className="absolute w-full mx-auto px-4">
           {/* <div className="flex flex-wrap justify-center text-center mb-2">

@@ -40,7 +40,7 @@ const BookDetails = ({selectedBookId, setView, setSelectedBookId, showAlert, upd
       <div className="bg-white shadow rounded p-4">
         <div className="flex justify-between items-center">
           <h2 className="text-xl font-semibold mb-4">Book Details</h2>
-          <div>
+          <div className="space-y-2">
             <button
               onClick={() => {
                 setView('updateBook');

@@ -1,9 +1,12 @@
 import React, {useState, useEffect} from 'react'
-// import { fetchBooks } from '../api';
+import { LoadingOverlay } from '../components';
+
 const BooksList = ({books, viewBook}) => {
+  const [loading, setLoading] = useState(false);
 
   return (
     <div className="data-display-section">
+      {loading && <LoadingOverlay />}
       <div className="bg-white shadow rounded p-4">
         <h2 className="text-xl font-semibold mb-4">Books List</h2>
         <div className="overflow-x-auto">
@@ -32,7 +35,10 @@ const BooksList = ({books, viewBook}) => {
                   <td className="border-b p-2 truncate w-64">{book.synopsis}</td>
                   <td className="border-b p-2">
                     <button
-                      onClick={() => viewBook(book.id)}
+                      onClick={() => {
+                        setLoading(true);
+                        viewBook(book.id, () => setLoading(false));
+                      }}
                       className="bg-blue-500 text-white hover:text-white hover:opacity-75 py-1 px-3 rounded"
                     >
                       View
