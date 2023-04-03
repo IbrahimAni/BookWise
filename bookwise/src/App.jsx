@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Navbar, AddBookForm, BooksList, BookDetails, UpdateBookForm } from './sections';
-import { BookActionAlert } from './components';
+import { BookActionAlert, OutputFormat } from './components';
 import { fetchBooks, searchBook } from './api';
 import { LoadingOverlay } from './components';
 
@@ -11,11 +11,27 @@ function App() {
   const [books, setBooks] = useState([]);
   const [selectedBookId, setSelectedBookId] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(true); // for the model that stores the format the data that will be returned
 
 
   useEffect(() => {
     updateBooks();
+    // const hasShownModal = localStorage.getItem('hasShownModal')
+    // if (!hasShownModal) {
+    //   setIsOpen(true)
+    //   localStorage.setItem('hasShownModal', true)
+    // }
   }, []);
+
+  const handleOutputFormat = (format) => {
+    localStorage.setItem('format', format);
+    closeModal();
+  };
+  
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
 
   const searchBookByTitle = async(title, callback) => {
     const fetchedBooks = await searchBook(title);
@@ -63,6 +79,7 @@ function App() {
 
   return (
     <div className="bg-gradient-to-r from-purple-600 via-blue-500 to-green-500 min-h-screen w-full">
+      {isModalOpen && <OutputFormat isOpen={isModalOpen} onClose={closeModal} onSelectFormat={handleOutputFormat}  />}
       {loading && <LoadingOverlay />}
       <BookActionAlert bookAdded={alert.show} action={alert.action} />
       <Navbar handleViewChange={handleViewChange} searchBookByTitle={searchBookByTitle} />
