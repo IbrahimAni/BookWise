@@ -86,9 +86,10 @@ const AddBookForm= ({showAlert, updateBooks }) => {
               Date
             </label>
             <input
-              type="date"
+              type="text"
               className="form-input w-full p-2 border rounded"
               id="book-date"
+              placeholder="Enter Date"
               name="date"
               value={book.date}
               onChange={handleChange}

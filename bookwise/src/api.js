@@ -2,6 +2,10 @@ import axios from "axios";
 
 const baseUrl = import.meta.env.VITE_APP_BASEURL;
 
+const getFormat = () => {
+  return localStorage.getItem('format');
+};
+
 export const fetchBooks = async () => {
   try {
     const response = await axios.get(baseUrl);
@@ -24,7 +28,7 @@ export const addBook = async (book) => {
 
 export const fetchBook = async (bookId) => {
   try {
-    const response = await axios.get(`${baseUrl}?id=${bookId}`);
+    const response = await axios.get(`${baseUrl}?id=${bookId}&format=${getFormat()}`);
     return response.data;
   } catch (error) {
     console.error('Error fetching book:', error);
@@ -34,7 +38,7 @@ export const fetchBook = async (bookId) => {
 
 export const updateBook = async(bookId, book) => {
   try {
-    const response = await axios.put(`${baseUrl}?id=${bookId}`, book);
+    const response = await axios.put(`${baseUrl}?id=${bookId}&format=${getFormat()}`, book);
     return response.data;
   } catch (error) {
     console.error('Error updating book:', error);
@@ -44,7 +48,7 @@ export const updateBook = async(bookId, book) => {
 
 export const deleteBook = async(bookId) => {
   try {
-    const response = await axios.delete(`${baseUrl}?id=${bookId}`);
+    const response = await axios.delete(`${baseUrl}?id=${bookId}&format=${getFormat()}`);
     return response.data;
   } catch (error) {
     console.error('Error deleting book:', error);
@@ -54,7 +58,7 @@ export const deleteBook = async(bookId) => {
 
 export const searchBook = async(title) => {
   try {
-    const response = await axios.get(`${baseUrl}?query=${title}`);
+    const response = await axios.get(`${baseUrl}?query=${title}&format=${getFormat()}`  );
     return response.data;
   } catch (error) {
     console.error('Error searching book:', error);
